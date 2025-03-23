@@ -1,0 +1,6 @@
+@CatTinder_HostAddress = http://localhost:5170
+
+GET {{CatTinder_HostAddress}}/Cat/
+Accept: application/json
+
+###
