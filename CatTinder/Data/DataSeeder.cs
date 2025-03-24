@@ -68,7 +68,7 @@ namespace CatTinder.Data
             try
             {
                 // Cataas returns a new cat image every time
-                var url = "https://cataas.com/cat";
+                var url = "https://cataas.com/cat?width=400&height=400";
                 return await client.GetByteArrayAsync(url);
             }
             catch

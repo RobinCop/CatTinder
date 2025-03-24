@@ -17,14 +17,22 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
 
 var app = builder.Build();
+app.UseCors("AllowFrontend");
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await DataSeeder.SeedCatsAsync(dbContext);
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

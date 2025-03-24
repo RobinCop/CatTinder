@@ -1,4 +1,5 @@
 ﻿using CatTinder.Models;
+using CatTinder.Models.Dto;
 using CatTinder.Repositories.Interfaces;
 using CatTinder.Services.Interfaces;
 
@@ -13,14 +14,31 @@ namespace CatTinder.Services
             _catRepository = catRepository;
         }
 
-        public async Task<IEnumerable<Cat>> GetAllCatsAsync()
+        public async Task<IEnumerable<CatDto>> GetAllCatsAsync()
         {
-            return await _catRepository.GetAllCatsAsync();
+            var cats = await _catRepository.GetAllCatsAsync();
+
+            return cats.Select(cat => new CatDto
+            {
+                Id = cat.Id,
+                Name = cat.Name,
+                Description = cat.Description,
+                ImageBase64 = cat.Image != null ? Convert.ToBase64String(cat.Image) : null
+            });
         }
 
-        public async Task<Cat?> GetCatByIdAsync(int id)
+        public async Task<CatDto?> GetCatByIdAsync(int id)
         {
-            return await _catRepository.GetCatByIdAsync(id);
+            var cat = await _catRepository.GetCatByIdAsync(id);
+            if (cat == null) return null;
+
+            return new CatDto
+            {
+                Id = cat.Id,
+                Name = cat.Name,
+                Description = cat.Description,
+                ImageBase64 = cat.Image != null ? Convert.ToBase64String(cat.Image) : null
+            };
         }
 
         public async Task AddCatAsync(Cat cat)
